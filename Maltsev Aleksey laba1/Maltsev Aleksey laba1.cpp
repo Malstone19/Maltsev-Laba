@@ -50,6 +50,9 @@ void zamena(truba&pipe1)
             cin >> pipe1.repair;
         }
     }
+    else {
+        cout << "Вы еще не создали трубу" << endl;
+    }
 
 }
 
@@ -109,7 +112,7 @@ void redakt(ks& ks1)
         }
         else
         {
-            if (ks1.ammountceh <= ks1.ammountcehwork)
+            if (ks1.ammountceh < ks1.ammountcehwork)
             {
                 cout << "Ошибка" << endl;
             }
@@ -128,13 +131,17 @@ void redakt(ks& ks1)
         }
 
     }
+    else {
+        cout << "Вы еще не создали КС" << endl;
+    }
     
 }
 
 void izfile(truba& pipe1, ks& ks1)
 {
     ifstream fin("in.txt");
-
+    ks1.exist = true;
+    pipe1.exist = true;
     if (!fin.is_open())
         cout << "Файл не может быть открыт";
     else
@@ -145,7 +152,7 @@ void izfile(truba& pipe1, ks& ks1)
     }
 }
 
-void proverka() 
+/*void proverka() 
 {
     int x;
     do {
@@ -153,7 +160,7 @@ void proverka()
         cin.ignore(1000, '\ n');
         cin >> x;
     } while (cin.fail());
-}
+}*/
 
 void addpipe(truba& pipe1)
 {
@@ -170,19 +177,33 @@ void addpipe(truba& pipe1)
 
 void vivod(truba pipe1, ks ks1)
 {
-    cout << endl;
-    cout << "Труба" << endl;
-    cout << "Индетификатор трубы: " << pipe1.id << endl;
-    cout << "Длина трубы: " << pipe1.dlina << endl;
-    cout << "Диаметр трубы: " << pipe1.diam << endl;
-    cout << "Ремонт?: " << pipe1.repair << endl;
-    cout << endl;
-    cout << "Компрессорная станция" << endl;
-    cout << "Индетификатор КС: " << ks1.id << endl;
-    cout << "Название КС: " << ks1.name << endl;
-    cout << "Количество цехов: " << ks1.ammountceh << endl;
-    cout << "Количество рабочих цехов: " << ks1.ammountcehwork << endl;
-    cout << "Показатель: " << ks1.index << endl;
+    if (pipe1.exist == true)
+    {
+        cout << endl;
+        cout << "Труба"<< endl;
+        cout << "Идентификатор трубы: "<< pipe1.id << endl;
+        cout << "Длина трубы: "<< pipe1.dlina<< endl;
+        cout << "Диаметр трубы: "<< pipe1.diam<< endl;
+        cout << "Ремонт?: "<< pipe1.repair << endl;
+    }
+    else
+    {
+        cout << "Вы забыли ввести данные по трубе"<< endl;
+    }
+    if (ks1.exist == true)
+    {
+        cout << endl;
+        cout << "Компрессорная станция" << endl;
+        cout << "Идентификатор КС: " << ks1.id << endl;
+        cout << "Название КС: "<< ks1.name << endl;
+        cout << "Количество цехов: " << ks1.ammountceh << endl;
+        cout << "Количество рабочих цехов: " << ks1.ammountcehwork << endl;
+        cout << "Показатель: " << ks1.index << endl;
+    }
+    else
+    {
+        cout << "Вы забыли ввести данные по КС!" << endl;
+    }
 }
 
 void print_menu() 
@@ -209,11 +230,20 @@ int main()
         int nomer;
         cout << "Введите число: ";
         cin >> nomer;
-        while(nomer < 0 || nomer > 7)
+        while (nomer < 0 || nomer > 7)
         {
             cout << "Введите корректно: ";
             cin >> nomer;
         }
+        /*print_menu();
+        int nomer;
+        cout << "Введите число: ";
+        do {                                //Способ, который предложили одногруппники
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cin >> nomer;
+        } while ((nomer < 0 || nomer > 7) || (cin.fail()));*/        //С этим способом не получается сразу ввести число из меню
+
         
         switch (nomer)
         {
@@ -240,6 +270,7 @@ int main()
             case 4:
             {
                 zamena(pipe1);
+                system("pause");
                 break;
             }
             case 5:
