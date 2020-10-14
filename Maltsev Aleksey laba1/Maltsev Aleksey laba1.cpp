@@ -26,16 +26,35 @@ struct ks
 
 void addks(ks& ks1)
 {
-    cout << "Введите индетификатор:";
-    cin >> ks1.id;
+    do {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Введите идентификатор: ";
+        cin >> ks1.id;
+    } while (ks1.id < 0 || cin.fail());
+    
     cout << "Введите название:";
     cin >> ks1.name;
-    cout << "Введите количество цехов:";
-    cin >> ks1.ammountceh;
-    cout << "Введите количество цехов в работе:";
-    cin >> ks1.ammountcehwork;
-    cout << "Введите показатель:";
-    cin >> ks1.index;
+
+    do {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Введите количество цехов: ";
+        cin >> ks1.ammountceh;
+    } while (ks1.ammountceh < 0 || cin.fail());
+    do {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Введите количество работающих цехов: ";
+        cin >> ks1.ammountcehwork;
+    } while (ks1.ammountcehwork < 0 || cin.fail());
+    do {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Введите показатель: ";
+        cin >> ks1.index;
+    } while (ks1.index < 0 || cin.fail());
+    
     ks1.exist = true;
 }
 
@@ -164,14 +183,31 @@ void izfile(truba& pipe1, ks& ks1)
 
 void addpipe(truba& pipe1)
 {
-    cout << "Введите индетификатор:" << endl;
-    cin >> pipe1.id;
-    cout << "Введите длину:" << endl;
-    cin >> pipe1.dlina;
-    cout << "Введите диаметр:" << endl;
-    cin >> pipe1.diam;
-    cout << "Ремонт?" << endl;
-    cin >> pipe1.repair;
+    do {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Введите идентификатор: ";
+        cin >> pipe1.id;
+    } while (pipe1.id < 0 || cin.fail());
+    do {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Введите длину трубы: ";
+        cin >> pipe1.dlina;
+    } while (pipe1.dlina < 0 || cin.fail());
+    do {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Введите диаметр трубы: ";
+        cin >> pipe1.diam;
+    } while (pipe1.diam < 0 || cin.fail());
+    do {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "В ремонте?: ";
+        cin >> pipe1.repair;
+    } while (pipe1.repair < 0 || cin.fail());
+
     pipe1.exist = true;
 }
 
@@ -217,6 +253,19 @@ void print_menu()
     cout << "6. Сохранить" << endl;
     cout << "7. Загрузить" << endl;
     cout << "0. Выход" << endl;
+    cout << "Введите команду: ";
+}
+
+int GetCorrectNumber(int left, int right) //Рабочий способ, который подсказали ребята, который был в лекции
+{
+    int x;
+    while (((cin >> x)).fail() || x<left || x>right)
+    {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Ошибка при вводе" << endl << "Введите команду: ";
+    }
+    return x;
 }
 
 int main()
@@ -227,25 +276,7 @@ int main()
     while (true)
     { 
         print_menu();
-        int nomer;
-        cout << "Введите число: ";
-        cin >> nomer;
-        while (nomer < 0 || nomer > 7)
-        {
-            cout << "Введите корректно: ";
-            cin >> nomer;
-        }
-        /*print_menu();
-        int nomer;
-        cout << "Введите число: ";
-        do {                                //Способ, который предложили одногруппники
-            cin.clear();
-            cin.ignore(1000, '\n');
-            cin >> nomer;
-        } while ((nomer < 0 || nomer > 7) || (cin.fail()));*/        //С этим способом не получается сразу ввести число из меню
-
-        
-        switch (nomer)
+        switch (GetCorrectNumber(0,7))
         {
             case 0:
             {
