@@ -24,136 +24,116 @@ struct ks
     float index;
 };
 
-void addks(ks& ks1)
+template <typename T>
+
+void checking(T& var, string com)
 {
     do {
         cin.clear();
         cin.ignore(1000, '\n');
-        cout << "Введите идентификатор: ";
-        cin >> ks1.id;
-    } while (ks1.id < 0 || cin.fail());
-    
+        cout << com;
+        cin >> var;
+    } while (var < 0 || cin.fail());
+}
+
+
+void addks(ks& ks1)
+{
+    checking(ks1.id, "Введите идентификатор:");
     cout << "Введите название:";
     cin >> ks1.name;
+    checking(ks1.ammountceh, "Введите количество цехов:");
+    checking(ks1.ammountcehwork, "Введите количество работающих цехов:");
+    checking(ks1.index, "Введите показатель:");
 
-    do {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "Введите количество цехов: ";
-        cin >> ks1.ammountceh;
-    } while (ks1.ammountceh < 0 || cin.fail());
-    do {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "Введите количество работающих цехов: ";
-        cin >> ks1.ammountcehwork;
-    } while (ks1.ammountcehwork < 0 || cin.fail());
-    do {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "Введите показатель: ";
-        cin >> ks1.index;
-    } while (ks1.index < 0 || cin.fail());
-    
     ks1.exist = true;
 }
 
-void zamena(truba&pipe1) 
+void zamena(truba& pipe1)
 {
-    if (pipe1.exist == true) 
+    cout << "Если хотите изменить - 1; если случайно попали, то 0" << endl;
+    int t; cin >> t;
+    if (t == 1)
     {
-        cout << "Если хотите изменить - 1; если случайно попали, то 0" << endl;
-        int t; cin >> t;
-        if (t == 1)
-        {
-            cin >> pipe1.repair;
-        }
+        cin >> pipe1.repair;
     }
-    else {
-        cout << "Вы еще не создали трубу" << endl;
-    }
+
 
 }
 
 void file(truba pipe1, ks ks1)
 {
     ofstream outf("file.txt");
-    if (pipe1.exist == true) 
+    if (!outf.is_open())
     {
-        outf << "Труба" << endl;
-        outf << "Индетификатор трубы: " << pipe1.id << endl;
-        outf << "Длина трубы: " << pipe1.dlina << endl;
-        outf << "Диаметр трубы: " << pipe1.diam << endl;
-        outf << "Ремонт?: " << pipe1.repair << endl;
+        cout << "Файл не может быть открыт";
     }
-    else 
+    else
     {
-        outf << "Труба не создана";
-        cout << "Труба не создана" << endl;
-    }
-    if (ks1.exist == true) 
-    {
-        outf << endl;
-        outf << "Компрессорная станция" << endl;
-        outf << "Индетификатор КС: " << ks1.id << endl;
-        outf << "Название КС: " << ks1.name << endl;
-        outf << "Количество цехов: " << ks1.ammountceh << endl;
-        outf << "Количество рабочих цехов: " << ks1.ammountcehwork << endl;
-        outf << "Показатель: " << ks1.index << endl;
-    }
-    else 
-    {
-        outf << endl;
-        outf << "Компрессорная станция не создана";
-        cout << endl;
-        cout << "Компрессорная станция не создана" << endl;
-    }
-}
 
-void redakt(ks& ks1) 
-{
-    if (ks1.exist == true)
-    {
-        cout << "Если хотите добавить работающий цех - нажмите 1; если хотите отнять - нажмите 0" << endl;
-        int x;
-        cin >> x;
-        if (x==1)
+        if (pipe1.exist == true)
         {
-            if (ks1.ammountceh <= ks1.ammountcehwork) 
-            {
-                cout << "Ошибка" << endl;
-            }
-            else 
-            {
-                ks1.ammountcehwork++;
-                cout << "Новое количество цехов " << ks1.ammountcehwork << endl;
-            }
+            outf << "Труба" << endl;
+            outf << "Индетификатор трубы: " << pipe1.id << endl;
+            outf << "Длина трубы: " << pipe1.dlina << endl;
+            outf << "Диаметр трубы: " << pipe1.diam << endl;
+            outf << "Ремонт?: " << pipe1.repair << endl;
         }
         else
         {
-            if (ks1.ammountceh < ks1.ammountcehwork)
-            {
-                cout << "Ошибка" << endl;
-            }
-            else
-            {
-                if (ks1.ammountcehwork > 0)
-                {
-                    ks1.ammountcehwork--;
-                    cout << "Новое количество цехов " << ks1.ammountcehwork << endl;
-                }
-                else
-                {
-                    cout << "Ошибка" << endl;
-                }
-            }
+            outf << "Труба не создана";
+            cout << "Труба не создана" << endl;
         }
+        if (ks1.exist == true)
+        {
+            outf << endl;
+            outf << "Компрессорная станция" << endl;
+            outf << "Индетификатор КС: " << ks1.id << endl;
+            outf << "Название КС: " << ks1.name << endl;
+            outf << "Количество цехов: " << ks1.ammountceh << endl;
+            outf << "Количество рабочих цехов: " << ks1.ammountcehwork << endl;
+            outf << "Показатель: " << ks1.index << endl;
+        }
+        else
+        {
+            outf << endl;
+            outf << "Компрессорная станция не создана";
+            cout << endl;
+            cout << "Компрессорная станция не создана" << endl;
+        }
+    }
+    outf.close();
+}
 
+void redakt(ks& ks1)
+{
+    cout << "Если хотите добавить работающий цех - нажмите 1; если хотите отнять - нажмите 0" << endl;
+    int x;
+    cin >> x;
+    if (x == 1)
+    {
+        if (ks1.ammountcehwork + 1 > 0 && ks1.ammountcehwork + 1 <= ks1.ammountceh)
+        {
+            ks1.ammountcehwork++;
+            cout << "Сделано" << endl;
+        }
+        else
+        {
+            cout << "Нельзя сделать" << endl;
+        }
     }
-    else {
-        cout << "Вы еще не создали КС" << endl;
+    else
+    {
+        if (ks1.ammountcehwork - 1 >= 0 && ks1.ammountcehwork - 1 < ks1.ammountceh)
+        {
+            ks1.ammountcehwork--;
+            cout << "Сделано" << endl;
+        }
+        else
+        {
+            cout << "Ошибка";
+        }
     }
-    
 }
 
 void izfile(truba& pipe1, ks& ks1)
@@ -169,9 +149,10 @@ void izfile(truba& pipe1, ks& ks1)
         fin >> ks1.id >> ks1.name >> ks1.ammountceh >> ks1.ammountcehwork >> ks1.index;
 
     }
+    fin.close();
 }
 
-/*void proverka() 
+/*void proverka()
 {
     int x;
     do {
@@ -183,66 +164,36 @@ void izfile(truba& pipe1, ks& ks1)
 
 void addpipe(truba& pipe1)
 {
-    do {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "Введите идентификатор: ";
-        cin >> pipe1.id;
-    } while (pipe1.id < 0 || cin.fail());
-    do {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "Введите длину трубы: ";
-        cin >> pipe1.dlina;
-    } while (pipe1.dlina < 0 || cin.fail());
-    do {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "Введите диаметр трубы: ";
-        cin >> pipe1.diam;
-    } while (pipe1.diam < 0 || cin.fail());
-    do {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "В ремонте?: ";
-        cin >> pipe1.repair;
-    } while (pipe1.repair < 0 || cin.fail());
+    checking(pipe1.id, "Введите идентификатор:");
+    checking(pipe1.dlina, "Введите длину трубы:");
+    checking(pipe1.diam, "Введите диаметр трубы:");
+    checking(pipe1.repair, "В ремонте?:");
 
     pipe1.exist = true;
 }
 
-void vivod(truba pipe1, ks ks1)
+void vivodks(ks ks1)
 {
-    if (pipe1.exist == true)
-    {
-        cout << endl;
-        cout << "Труба"<< endl;
-        cout << "Идентификатор трубы: "<< pipe1.id << endl;
-        cout << "Длина трубы: "<< pipe1.dlina<< endl;
-        cout << "Диаметр трубы: "<< pipe1.diam<< endl;
-        cout << "Ремонт?: "<< pipe1.repair << endl;
-    }
-    else
-    {
-        cout << "Вы забыли ввести данные по трубе"<< endl;
-    }
-    if (ks1.exist == true)
-    {
-        cout << endl;
-        cout << "Компрессорная станция" << endl;
-        cout << "Идентификатор КС: " << ks1.id << endl;
-        cout << "Название КС: "<< ks1.name << endl;
-        cout << "Количество цехов: " << ks1.ammountceh << endl;
-        cout << "Количество рабочих цехов: " << ks1.ammountcehwork << endl;
-        cout << "Показатель: " << ks1.index << endl;
-    }
-    else
-    {
-        cout << "Вы забыли ввести данные по КС!" << endl;
-    }
+    cout << endl;
+    cout << "Компрессорная станция" << endl;
+    cout << "Идентификатор КС: " << ks1.id << endl;
+    cout << "Название КС: " << ks1.name << endl;
+    cout << "Количество цехов: " << ks1.ammountceh << endl;
+    cout << "Количество рабочих цехов: " << ks1.ammountcehwork << endl;
+    cout << "Показатель: " << ks1.index << endl;
 }
 
-void print_menu() 
+void vivodtruba(truba pipe1)
+{
+    cout << endl;
+    cout << "Труба" << endl;
+    cout << "Идентификатор трубы: " << pipe1.id << endl;
+    cout << "Длина трубы: " << pipe1.dlina << endl;
+    cout << "Диаметр трубы: " << pipe1.diam << endl;
+    cout << "Ремонт?: " << pipe1.repair << endl;
+}
+
+void print_menu()
 {
     system("cls"); // очищаем экран
     cout << "1. Добавить трубу" << endl;
@@ -274,59 +225,70 @@ int main()
     truba pipe1;
     ks ks1;
     while (true)
-    { 
+    {
         print_menu();
-        switch (GetCorrectNumber(0,7))
+        switch (GetCorrectNumber(0, 7))
         {
-            case 0:
-            {
-                return 0;
-            }
-            case 1: 
-            {
-                addpipe(pipe1);
-                break;
-            }
-            case 2:
-            {
-                addks(ks1);
-                break;
-            }
-            case 3:
-            {
-                vivod(pipe1, ks1);
-                system("pause");
-                break;
-            }
-            case 4:
+        case 0:
+        {
+            return 0;
+        }
+        case 1:
+        {
+            addpipe(pipe1);
+            break;
+        }
+        case 2:
+        {
+            addks(ks1);
+            break;
+        }
+        case 3:
+        {
+            if (ks1.exist == false) { cout << "Вы не создали КС" << endl; }
+            else { vivodks(ks1); }
+            if (pipe1.exist == false) { cout << "Вы не создали трубу" << endl; }
+            else { vivodtruba(pipe1); }
+            system("pause");
+            break;
+        }
+        case 4:
+        {
+            if (pipe1.exist == false) { cout << "Вы не создали трубу" << endl; }
+            else
             {
                 zamena(pipe1);
                 system("pause");
                 break;
             }
-            case 5:
+        }
+        case 5:
+        {
+            if (ks1.exist == false) { cout << "Вы не создали КС" << endl; }
+            else
             {
                 redakt(ks1);
                 system("pause");
                 break;
             }
-            case 6:
-            {
-                file(pipe1, ks1);
-                system("pause");
-                break;
-            }
-            case 7:
-            {
-                izfile(pipe1, ks1);
-                break;
-            }
         }
-    
+        case 6:
+        {
+            file(pipe1, ks1);
+            system("pause");
+            break;
+        }
+        case 7:
+        {
+            izfile(pipe1, ks1);
+            system("pause");
+            break;
+        }
+        }
+
 
 
 
     }
 
 }
-
