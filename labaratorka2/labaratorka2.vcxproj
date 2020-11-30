@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{b6980a14-e716-4b92-b899-f6f3b35b5f61}</ProjectGuid>
-    <RootNamespace>MaltsevAlekseylaba1</RootNamespace>
+    <ProjectGuid>{7d834786-7c94-4af4-9b3e-19fd112dad95}</ProjectGuid>
+    <RootNamespace>labaratorka2</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,7 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Maltsev Aleksey laba1.cpp" />
+    <ClCompile Include="ks.cpp" />
+    <ClCompile Include="labaratorka2.cpp" />
+    <ClCompile Include="truba.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ks.h" />
+    <ClInclude Include="truba.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
