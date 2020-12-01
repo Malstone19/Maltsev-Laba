@@ -1,6 +1,12 @@
 #include "ks.h"
 #include "utils.h"
 using namespace std;
+int ks::MaxID = 0;
+
+ks::ks()
+{
+    id = ++MaxID;
+}
 
 ostream& operator << (ostream& out, const ks& t)
 {
@@ -15,7 +21,6 @@ ostream& operator << (ostream& out, const ks& t)
 }
 istream& operator >> (istream& in, ks& t)
 {
-    checking(t.id, "¬ведите идентификатор:");
     cout << "¬ведите название:";
     cin >> t.name;
     checking(t.ammountceh, "¬ведите количество цехов:");
@@ -25,4 +30,16 @@ istream& operator >> (istream& in, ks& t)
     } while (t.ammountcehwork > t.ammountceh);
     checking(t.index, "¬ведите показатель:");
     return in;
+}
+
+ofstream& operator << (ofstream& fout, const ks& t)
+{
+    fout << endl << t.id << endl << t.name << endl << t.ammountceh << endl << t.ammountcehwork << endl << t.index;
+    return fout;
+}
+
+ifstream& operator >> (ifstream& fin, ks& t)
+{
+    fin >> t.id >> t.name >> t.ammountceh >> t.ammountcehwork >> t.index;
+    return fin;
 }

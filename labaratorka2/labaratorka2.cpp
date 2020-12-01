@@ -17,7 +17,7 @@ void zamena(truba& pipe1)
 }
 
 
-void filetruba(ofstream& outf, const truba& pipe1)
+/*void filetruba(ofstream& outf, const truba& pipe1)
 {
     outf << "Труба" << endl;
     outf << "Индетификатор трубы: " << pipe1.id << endl;
@@ -35,7 +35,7 @@ void fileks(ofstream& outf, const ks& ks1)
     outf << "Количество цехов: " << ks1.ammountceh << endl;
     outf << "Количество рабочих цехов: " << ks1.ammountcehwork << endl;
     outf << "Показатель: " << ks1.index << endl;
-}
+}*/
 
 
 void redakt(ks& ks1)
@@ -73,7 +73,7 @@ void redakt(ks& ks1)
 }
 
 
-truba izfiletruba(ifstream& fin)
+/*truba izfiletruba(ifstream& fin)
 {
     truba pipe1;
     fin >> pipe1.id >> pipe1.dlina >> pipe1.diam >> pipe1.repair;
@@ -85,7 +85,7 @@ ks izfileks(ifstream& fin)
     ks ks1;
     fin >> ks1.id >> ks1.name >> ks1.ammountceh >> ks1.ammountcehwork >> ks1.index;
     return ks1;
-}
+}*/
 
 
 
@@ -97,13 +97,15 @@ void print_menu()
     cout << "3. Просмотр всех объектов" << endl;
     cout << "4. Редактировать трубу" << endl;
     cout << "5. Редактировать КС" << endl;
-    cout << "6. Сохранить" << endl;
-    cout << "7. Загрузить" << endl;
+    cout << "6. Сохранить трубы" << endl;
+    cout << "7. Загрузить трубы" << endl;
     cout << "8. Удалить трубу" << endl;
     cout << "9. Удалить КС" << endl;
     cout << "10. Поиск трубы по фильтру" << endl;
     cout << "11. Поиск КС по имени" << endl;
     cout << "12. Поиск по проценту" << endl;
+    cout << "13. Сохранить КС" << endl;
+    cout << "14. Загрузить КС" << endl;
     cout << "0. Выход" << endl;
     cout << "Введите команду: ";
 }
@@ -120,6 +122,14 @@ int GetCorrectNumber(int left, int right)
     return x;
 }
 
+string file_name()
+{
+    string name_file;
+    cout << "Введите название файла: ";
+    cin.ignore(1, '\n');
+    getline(cin, name_file);
+    return name_file;
+}
 
 
 truba& SelectPipe(vector<truba>& g)
@@ -208,7 +218,7 @@ int main()
     while (true)
     {
         print_menu();
-        switch (GetCorrectNumber(0, 12))
+        switch (GetCorrectNumber(0, 14))
         {
         case 0:
         {
@@ -271,16 +281,12 @@ int main()
         case 6:
         {
             ofstream outf;
-            outf.open("data.txt", ios::out);
+            outf.open(file_name(), ios::out);
             if (outf.is_open())
             {
-                outf << pipes.size() << endl;
+                outf << pipes.size();
                 for (truba pipe1 : pipes)
-                    filetruba(outf, pipe1);
-                outf << endl;
-                outf << kss.size();
-                for (ks ks1 : kss)
-                    fileks(outf, ks1);
+                    outf << pipe1;
                 outf.close();
             }
             system("pause");
@@ -289,17 +295,14 @@ int main()
         case 7:
         {
             ifstream fin;
-            fin.open("data.txt", ios::in);
+            fin.open(file_name(), ios::in);
             if (fin.is_open())
             {
                 int countpipe;
                 fin >> countpipe;
-                while (countpipe--)
-                    pipes.push_back(izfiletruba(fin));
-                int countks;
-                fin >> countks;
-                while (countks--)
-                    kss.push_back(izfileks(fin));
+                pipes.resize(countpipe);
+                for (truba& pipe1 : pipes)
+                    fin >> pipe1;
                 fin.close();
             }
             system("pause");
@@ -389,9 +392,37 @@ int main()
                 cout << "Вы не ввели КС" << endl;
                 system("pause");
                 break;
+            }           
+        }
+        case 13:
+        {
+            ofstream outf;
+            outf.open(file_name(), ios::out);
+            if (outf.is_open())
+            {
+                outf << kss.size();
+                for (ks ks1 : kss)
+                    outf << ks1;
+                outf.close();
             }
-
-            
+            system("pause");
+            break;
+        }
+        case 14:
+        {
+            ifstream fin;
+            fin.open(file_name(), ios::in);
+            if (fin.is_open())
+            {
+                int countks;
+                fin >> countks;
+                kss.resize(countks);
+                for (ks& ks1 : kss)
+                    fin >> ks1;
+                fin.close();
+            }
+            system("pause");
+            break;
         }
         }
 
