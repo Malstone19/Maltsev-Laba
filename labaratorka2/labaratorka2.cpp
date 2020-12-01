@@ -129,11 +129,11 @@ truba& SelectPipe(vector<truba>& g)
     return g[indexi - 1];
 }
 
-ks& SelectKs(vector<ks>& g)
+ks& SelectKs(vector<ks>& l)
 {
     cout << "Введите индекс КС: ";
-    unsigned int indexi = GetCorrectNumber(1u, g.size());
-    return g[indexi - 1];
+    unsigned int indexi = GetCorrectNumber(1u, l.size());
+    return l[indexi - 1];
 }
 
 void DeletePipe(vector<truba>& t)
@@ -143,11 +143,11 @@ void DeletePipe(vector<truba>& t)
     t.erase(t.begin() + indexi - 1);
 }
 
-void DeleteKs(vector<ks>& t)
+void DeleteKs(vector<ks>& d)
 {
     cout << "Введите индекс КС: ";
-    unsigned int indexi = GetCorrectNumber(1u, t.size());
-    t.erase(t.begin() + indexi - 1);
+    unsigned int indexi = GetCorrectNumber(1u, d.size());
+    d.erase(d.begin() + indexi - 1);
 }
 
 vector<int> filterpipe(vector<truba>& t)
@@ -239,15 +239,34 @@ int main()
         }
         case 4:
         {
-            zamena(SelectPipe(pipes));
-            system("pause");
-            break;
+            if (pipes.size() > 0)
+            {
+                zamena(SelectPipe(pipes));
+                system("pause");
+                break;
+            }
+            else
+            {
+                cout << "Вы не ввели трубы" << endl;
+                system("pause");
+                break;
+            }
+            
         }
         case 5:
         {
-            redakt(SelectKs(kss));
-            system("pause");
-            break;
+            if (kss.size() > 0)
+            {
+                redakt(SelectKs(kss));
+                system("pause");
+                break;
+            }
+            else
+            {
+                cout << "Вы не ввели КС" << endl;
+                system("pause");
+                break;
+            }  
         }
         case 6:
         {
@@ -288,39 +307,91 @@ int main()
         }
         case 8:
         {
-            DeletePipe(pipes);
+            if (pipes.size() > 0) 
+            {
+                DeletePipe(pipes);
+                break;
+            }
+            else
+            {
+                cout << "Вы не ввели трубы" << endl;
+                system("pause");
+                break;
+            }
+           
         }
         case 9:
         {
-            DeleteKs(kss);
+            if (kss.size() > 0)
+            {
+                DeleteKs(kss);
+                break;
+            }
+            else
+            {
+                cout << "Вы не ввели КС" << endl;
+                system("pause");
+                break;
+            }
         }
         case 10:
-        {
-            
-            auto index = filterpipe(pipes);
-            for (int i = 0; i < index.size(); i++) 
+        { 
+            if (pipes.size() > 0)
             {
-                cout << pipes[index[i]] << endl;
+                auto index = filterpipe(pipes);
+                for (int i = 0; i < index.size(); i++)
+                {
+                    cout << pipes[index[i]] << endl;
+                }
+                system("pause");
+                break;
             }
-            system("pause");
+            else
+            {
+                cout << "Вы не ввели трубы" << endl;
+                system("pause");
+                break;
+            }
         }
         case 11:
         {
-            auto ind = ksfiltername(kss);
-            for (int i = 0; i < ind.size(); i++) 
+            if (kss.size() > 0)
             {
-                cout << kss[ind[i]] << endl;
+                auto ind = ksfiltername(kss);
+                for (int i = 0; i < ind.size(); i++)
+                {
+                    cout << kss[ind[i]] << endl;
+                }
+                system("pause");
+                break;
             }
-            system("pause");
+            else
+            {
+                cout << "Вы не ввели КС" << endl;
+                system("pause");
+                break;
+            }
         }
         case 12:
         {
-            auto indd = ksfilterpercent(kss);
-            for (int i = 0; i < indd.size(); i++)
+            if (kss.size() > 0)
             {
-                cout << kss[indd[i]] << endl;
+                auto indd = ksfilterpercent(kss);
+                for (int i = 0; i < indd.size(); i++)
+                {
+                    cout << kss[indd[i]] << endl;
+                }
+                system("pause");
+                break;
             }
-            system("pause");
+            else
+            {
+                cout << "Вы не ввели КС" << endl;
+                system("pause");
+                break;
+            }
+
+            
         }
         }
 
