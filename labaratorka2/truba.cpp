@@ -9,6 +9,26 @@ truba::truba()
     id = ++MaxID;
 }
 
+unsigned int truba::GetMaxID()
+{
+    return MaxID;
+}
+
+void truba::editing_pipe()
+{
+    repair = !repair;
+    cout << "Успешно изменена на " << repair << endl;
+}
+
+int truba::GetId()
+{
+    return id;
+}
+bool truba::GetRepair()
+{
+    return repair;
+}
+
 ostream& operator << (ostream& out, const truba& p)
 {
     cout << endl;
@@ -21,9 +41,12 @@ ostream& operator << (ostream& out, const truba& p)
 }
 istream& operator >> (istream& in, truba& p)
 {
-    checking(p.dlina, "Введите длину трубы: ");
-    checking(p.diam, "Введите диаметр трубы: ");
-    checking(p.repair, "В ремонте?: ");
+    cout << "Введите длину трубы: ";
+    p.dlina = checking(0,300, "Введите длину трубы: ");
+    cout << "Введите диаметр трубы: ";
+    p.diam = checking(0, 300, "Введите диаметр трубы: ");
+    cout << "В ремонте?: ";
+    p.repair = checking(0, 1, "В ремонте?: ");
     return in;
 }
 

@@ -4,13 +4,16 @@
 class truba
 {
     int id;
+    static int MaxID;
 public:
     truba();
-    static int MaxID;
     float dlina;
-    float diam;
+    int diam;
     bool repair = false;
-   
+    void editing_pipe();
+    int GetId();
+    bool GetRepair();
+    static unsigned int GetMaxID();
 
     friend std::ostream& operator << (std::ostream& out, const truba& p);
     friend std::istream& operator >> (std::istream& in, truba& p);

@@ -8,6 +8,35 @@ ks::ks()
     id = ++MaxID;
 }
 
+void ks::editing_ks()
+{
+    ammountcehwork = checking(0, ammountceh, "¬ведите количество рабочих цехов: ");
+}
+
+int ks::GetId()
+{
+    return id;
+}
+
+unsigned int ks::GetMaxID()
+{
+    return MaxID;
+}
+int ks::Get_ammountceh()
+{
+    return ammountceh;
+}
+
+int ks::Get_ammountcehwork()
+{
+    return ammountcehwork;
+}
+
+std::string ks::Get_Name()
+{
+    return name;
+}
+
 ostream& operator << (ostream& out, const ks& t)
 {
     cout << endl;
@@ -22,13 +51,14 @@ ostream& operator << (ostream& out, const ks& t)
 istream& operator >> (istream& in, ks& t)
 {
     cout << "¬ведите название:";
-    cin >> t.name;
-    checking(t.ammountceh, "¬ведите количество цехов:");
-    do
-    {
-        checking(t.ammountcehwork, "¬ведите количество работающих цехов:");
-    } while (t.ammountcehwork > t.ammountceh);
-    checking(t.index, "¬ведите показатель:");
+    cin.ignore(1, '\n');
+    getline(cin, t.name);
+    cout << "¬ведите количество цехов: ";
+    t.ammountceh = checking(0,1000, "¬ведите количество цехов: ");
+    cout << "¬ведите количество работающих цехов: ";
+    t.ammountcehwork = checking(0,t.ammountceh, "¬ведите количество работающих цехов: ");
+    cout << "¬ведите показатель:";
+    t.index = checking(0, 1, "¬ведите показатель:");
     return in;
 }
 

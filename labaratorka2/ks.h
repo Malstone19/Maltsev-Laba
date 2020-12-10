@@ -5,13 +5,23 @@
 class ks
 {
     int id;
+    static int MaxID;
 public:
     ks();
-    static int MaxID;
     std::string name;
     int ammountceh;
     int ammountcehwork;
     float index;
+    void editing_ks();
+    int GetId();
+    static unsigned int GetMaxID();
+
+    int Get_ammountceh();
+
+    int Get_ammountcehwork();
+
+    std::string Get_Name();
+
 
     friend std::ostream& operator << (std::ostream& out, const ks& t);
     friend std::istream& operator >> (std::istream& in, ks& t);

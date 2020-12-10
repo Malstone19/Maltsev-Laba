@@ -5,13 +5,20 @@
 
 
 template <typename T>
-
-void checking(T& var, std::string com)
+bool IsCorrect(T var, T left, T right)
 {
-    do {
-        std::cin.clear();
-        std::cin.ignore(1000, '\n');
-        std::cout << com;
-        std::cin >> var;
-    } while (var < 0 || std::cin.fail());
+	return var >= left && var <= right;
+}
+
+template <typename T>
+T checking(T left, T right, std::string message)
+{
+	T var;
+	while ((std::cin >> var).fail() || !IsCorrect(var, left, right))
+	{
+		std::cin.clear();
+		std::cin.ignore(1000, '\n');
+		std::cout << message;
+	}
+	return var;
 }
