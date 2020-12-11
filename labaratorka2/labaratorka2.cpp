@@ -11,11 +11,11 @@
 #include <unordered_map>
 
 using namespace std;
-/*struct paraks
+struct paraks
 {
-    int id;
-    float ves;
-};*/
+    int idks;
+    float idpipe;
+};
 
 void print_menu()
 {
@@ -36,6 +36,8 @@ void print_menu()
     cout << "14. Загрузить КС" << endl;
     cout << "15. Вывод графа тест" << endl;
     cout << "16. тут должна быть сортировка" << endl;
+    cout << "17. Вывод в файл" << endl;
+    cout << "18. Загрузка из файла" << endl;
     cout << "0. Выход" << endl;
     cout << "Введите команду: ";
 }
@@ -65,7 +67,7 @@ bool Checkrepair(truba& pipe1, bool repair)
 
 bool Checkks(ks& ks1, float percent)
 {
-    return percent > ((ks1.Get_ammountceh() - ks1.Get_ammountcehwork()) / ks1.Get_ammountceh() * 100);
+    return abs(percent - ((float)(ks1.Get_ammountceh() - (float)ks1.Get_ammountcehwork()) / (float)ks1.Get_ammountceh() * 100))<1e-6;
 }
 
 
@@ -98,78 +100,187 @@ void DeleteKs(unordered_map<int, ks>& d)
 }
 
 
-/*https://e-maxx.ru/algo/topological_sort
-void dfs(int v, unordered_map<int, vector<paraks>>& g, unordered_map<int, bool>& count, vector<int>& ans) {
+//https://e-maxx.ru/algo/topological_sort
+void dfs(int v, unordered_map<int, vector<paraks>>& g, unordered_map<int, bool>& count, vector<int>& answer) {
     count[v] = true;
-    vector<paraks> arr;
-    arr = g[v];
-    for (auto& vershina : arr) {
-        int to = vershina.id;
-        if (!count[to])
-            dfs(to, g, count, ans);
-    }
-    ans.push_back(v);
-}
-unordered_map<int, bool> usedks(unordered_map<int, vector<paraks>>& g)
-{
-    unordered_map<int, bool> usedArr;
-    for (auto& vershina : g)
-    {
-        usedArr[vershina.first] = false;
-        for (auto& p1 : vershina.second)
-        {
-            usedArr[p1.id] = false;
+    vector<paraks> array;
+    if (g.find(v) != g.end()) {
+
+        array = g[v];
+        for (auto& element : array) {
+            int to = element.idks;
+
+            if (!count[to])
+                dfs(to, g, count, answer);
         }
     }
-    return usedArr;
+    answer.push_back(v);
 }
-void topsort(unordered_map<int, vector<paraks>>& g, unordered_map<int, bool>& count, vector<int>& ans) {
+//https://e-maxx.ru/algo/finding_cycle
+bool dfs2(int v, unordered_map<int, vector<paraks>>& g, unordered_map<int, int>& cl, int& cycle_st) {
+    if (g.find(v) == g.end())
+    {
+        return false;
+    }
+    cl[v] = 1;
+    for (size_t i = 0; i < g[v].size(); ++i) {
+        int to;
+
+        to = g[v][i].idks;
+        if (cl[to] == 0) {
+            if (dfs2(to, g, cl, cycle_st))  return true;
+        }
+        else if (cl[to] == 1) {
+            cycle_st = to;
+            return true;
+        }
+    }
+    cl[v] = 2;
+    return false;
+}
+
+unordered_map<int, int> visitedks(unordered_map<int, vector<paraks>>& g)
+{
+    unordered_map<int, int> countArr;
+    for (auto& element : g)
+    {
+        countArr[element.first] = 0;
+        for (auto& p : element.second)
+        {
+            countArr[p.idks] = 0;
+        }
+    }
+    return countArr;
+}
+
+bool searchcycle(unordered_map<int, vector<paraks>>& g)
+{
+    unordered_map<int, int> p;
+    int cycle_st, cycle_end;
+    p = visitedks(g);
+    cycle_st = -1;
+    for (auto& element : p)
+        if (dfs2(element.first, g, p, cycle_st)) break;
+    if (cycle_st == -1) return false;
+    else return true;
+}
+
+
+unordered_map<int, bool> usedks(unordered_map<int, vector<paraks>>& g)
+{
+    unordered_map<int, bool> countArr;
+    for (auto& element : g)
+    {
+        countArr[element.first] = false;
+        for (auto& p : element.second)
+        {
+            countArr[p.idks] = false;
+        }
+    }
+    return countArr;
+}
+
+void topsort(unordered_map<int, vector<paraks>>& g, unordered_map<int, bool>& count, vector<int>& answer) {
     count = usedks(g);
 
-    ans.clear();
-    for (auto& vershina : count)
-        if (!vershina.second)
-            dfs(vershina.first, g, count, ans);
-    reverse(ans.begin(), ans.end());
+    answer.clear();
+    for (auto& element : count)
+        if (!element.second)
+            dfs(element.first, g, count, answer);
+    reverse(answer.begin(), answer.end());
 }
 
 
 
-void Vgraph(unordered_map<int, vector<paraks>>& g, vector<ks>& kss, vector<truba>& pipes, int indexpipe, int indexks1, int indexks2)
+void Vgraph(unordered_map<int, vector<paraks>>& graph, unordered_map<int, ks>& kss, unordered_map<int, truba>& pipes, int indexpipe, int indexks1, int indexks2)
 {
-    paraks para;
-    para.id = indexks2 - 1;
-    para.ves = pipes[indexpipe - 1].dlina;
-    g[indexks1 - 1].push_back(para);
+    paraks p;
+    p.idpipe = indexpipe;
+    p.idks = indexks2;
+    graph[indexks1].push_back(p);
 }
 
-void vivodgraph(unordered_map<int, vector<paraks>>& g)
+void vivodgraph(unordered_map<int, vector<paraks>>& graph, unordered_map<int, ks>& kss, unordered_map<int, truba>& pipes)
 {
-    for (auto& vershina : g)
+    for (auto& element : graph)
     {
-        cout << "Компрессорная станция " << vershina.first+1 << " соединена с: ";
-        for (auto ks = vershina.second.begin(); ks != vershina.second.end(); ks++)
+        cout << "КС с ID " << element.first << " соединен с КС'ми ID: ";
+        for (auto ks = element.second.begin(); ks != element.second.end(); ks++)
         {
-            cout << ks->id+1 << " КС, трубой длиной " << ks->ves;
-            if (ks + 1 != vershina.second.end()) cout << ", ";
+            cout << ks->idks << " трубой длиной " << pipes[ks->idpipe].dlina;
+            if (ks + 1 != element.second.end()) cout << ", ";
         }
         cout << endl;
     }
 }
-*/
+
+void gtofile(unordered_map<int, vector<paraks>> g)
+{
+
+    ofstream fout;
+    fout.open(file_name(), ios::out);
+    if (!fout.is_open())
+        cout << "Файл не может быть открыт!" << endl;
+    else
+    {
+
+        for (auto& element : g)
+        {
+            fout << element.second.size() << " ";
+            fout << element.first << " ";
+            for (auto ks = element.second.begin(); ks != element.second.end(); ks++)
+            {
+                fout << ks->idks << " " << ks->idpipe << " ";
+            }
+            fout << endl;
+        }
+        cout << "Вывели в файл данные" << endl;
+        fout.close();
+    }
+}
 
 
+
+void gfromfile(unordered_map<int, vector<paraks>>& g)
+{
+
+    ifstream fin(file_name(), ios::out);
+    if (!fin.is_open())
+        cout << "Файл не может быть открыт!" << endl;
+    else
+    {
+        int buff;
+        while (fin >> buff)
+        {
+            int ksid1;
+            fin >> ksid1;
+            for (int i = 0; i < buff; i++)
+            {
+                int ksid2;
+                fin >> ksid2;
+                int pipeid;
+                fin >> pipeid;
+                paraks pair1;
+                pair1.idks = ksid2;
+                pair1.idpipe = pipeid;
+                g[ksid1].push_back(pair1);
+            }
+        }
+        cout << "Ввели из файла данные" << endl;
+        fin.close();
+    }
+}
 
 int main()
 {
     setlocale(LC_ALL, "Russian");
     unordered_map<int, truba> pipes;
     unordered_map<int, ks> kss;
-   // unordered_map<int, vector<paraks>> g;
+    unordered_map<int, vector<paraks>> g;
     while (true)
     {
         print_menu();
-        switch (checking(0, 16, "Введите команду: "))
+        switch (checking(0, 18, "Введите команду: "))
         {
         case 0:
         {
@@ -196,21 +307,20 @@ int main()
                 {
                     cout << iter->second;
                 }
-            else cout << endl << "Вы забыли ввести данные трубы!\n";
+            else cout << endl << "Вы забыли ввести данные трубы!" << endl;;
 
             if (kss.size() > 0)
                 for (auto iter = kss.begin(); iter != kss.end(); ++iter)
                 {
-                    cout << iter->second ;
+                    cout << iter->second;
                 }
-            else cout << endl << "Вы забыли ввести данные КС!\n";
+            else cout << endl << "Вы забыли ввести данные КС!" << endl;;
             system("Pause");
             break;
         }
         case 4:
         {
             unordered_map <int, truba>::iterator number;
-            cout << "Введите ID трубы: ";
             if (pipes.size() > 0)
             {
                 cout << "Введите ID трубы: ";
@@ -218,14 +328,13 @@ int main()
                 number = pipes.find(index);
                 number->second.editing_pipe();
             }
-            else cout << "Вы забыли ввести данные трубы!\n";
+            else cout << "Вы забыли ввести данные трубы!" << endl;;
             system("Pause");
             break;           
         }
         case 5:
         {
             unordered_map <int, ks>::iterator number;
-            cout << "Введите ID КС: ";
             if (kss.size() > 0)
             {
                 cout << "Введите ID КС: ";
@@ -233,7 +342,7 @@ int main()
                 number = kss.find(index);
                 number->second.editing_ks();
             }
-            else cout << "Вы забыли ввести данные КС!\n";
+            else cout << "Вы забыли ввести данные КС!" << endl;
             system("Pause");
             break;
         }
@@ -249,7 +358,7 @@ int main()
                     for (auto iter = pipes.begin(); iter != pipes.end(); ++iter)
                         fout << iter->second;
                 }
-                else cout << "Вы забыли ввести данные для труб!\n";
+                else cout << "Вы забыли ввести данные для труб!" << endl;;
                 fout.close();
             }
             else cout << "Файл не открыт" << endl;
@@ -361,7 +470,7 @@ int main()
                     for (auto iter = kss.begin(); iter != kss.end(); ++iter)
                         fout << iter->second;
                 }
-                else cout << "Вы забыли ввести данные для КС!\n";
+                else cout << "Вы забыли ввести данные для КС!" << endl;
                 fout.close();
             }
             else cout << "Файл не открыт" << endl;
@@ -391,33 +500,70 @@ int main()
         }
         case 16:
         {
-           /* unordered_map<int, bool> used;
-            vector<int> ans;
-            topsort(g, used, ans);
-            for (auto i = ans.begin(); i != ans.end(); i++)
+            if (!searchcycle(g))
             {
-                cout << *i+1;
-                if (i + 1 != ans.end()) cout << ", ";
+                unordered_map<int, bool> count;
+                vector<int> answer;
+                topsort(g, count, answer);
+                for (auto i = answer.begin(); i != answer.end(); i++)
+                {
+                    cout << *i;
+                    if (i + 1 != answer.end()) cout << " , ";
+                }
+                cout << endl;
+                system("pause");
             }
-            cout << endl;
+            else
+            {
+                cout << "Граф цикличный";
+            }
             system("pause");
-            break;*/
+            break;
         }
         case 15:
         {
-           /* g.clear();
-            int time,indexpipe, indexks1, indexks2;
-            checking(time, "Сколько раз введете КС и трубу?");
+            unordered_map<int, bool> usedpipes;
+
+            for (auto& element : pipes)
+            {
+                usedpipes.insert(make_pair(element.first, false));
+            }
+
+            g.clear();
+            int time, indexpipe, indexks1, indexks2; 
+            cout << "Сколько раз введете КС и трубу?";
+            time = checking(0, 200,"Сколько раз введете КС и трубу?");
             while (time--)
             {
-                checking(indexpipe, "Введите индекс трубы ");
-                checking(indexks1, "Введите индекс КС1, от которой ");
-                checking(indexks2, "Введите индекс КС2, к которой ");
+                cout << "Введите индекс трубы ";
+                indexpipe = checking(0, 200, "Введите индекс трубы ");
+                while (usedpipes[indexpipe]) {
+                    cout << "Уже использовали" << endl;
+                    cout << "Введите индекс трубы ";
+                    indexpipe = checking(0, 200, "Введите индекс трубы ");
+                }
+                usedpipes[indexpipe] = true;
+                cout << "Введите индекс КС1, от которой ";
+                indexks1 = checking(0, 200, "Введите индекс КС1, от которой ");
+                cout << "Введите индекс КС2, к которой ";
+                indexks2 = checking(0,200, "Введите индекс КС2, к которой ");
                 Vgraph(g, kss, pipes, indexpipe, indexks1, indexks2);
             }
-            vivodgraph(g);
+            vivodgraph(g,kss,pipes);
             system("pause");
-            break;*/
+            break;
+        }
+        case 17:
+        {
+            gtofile(g);
+            system("pause");
+            break;
+        }
+        case 18:
+        {
+            gfromfile(g);
+            system("pause");
+            break;
         }
         }
 
