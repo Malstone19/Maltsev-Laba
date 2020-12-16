@@ -279,7 +279,11 @@ bool checkprov(unordered_map<int, vector<paraks>>& g, unordered_map<int, ks>& ks
 
     bool exist = false;
     vector<int> todelete;
-    if (g.find(idks) != g.end()) return false;
+    if (g.find(idks) != g.end())
+    {
+        g.erase(idks);
+        exist = true;
+    }
     for (auto element = g.begin(); element != g.end(); element++)
     {
         for (auto i = 0; i < element->second.size(); i++)
