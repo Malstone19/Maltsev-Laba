@@ -38,6 +38,9 @@ void print_menu()
     cout << "16. тут должна быть сортировка" << endl;
     cout << "17. Вывод в файл" << endl;
     cout << "18. Загрузка из файла" << endl;
+    cout << "19. Удалить вершину(сток)" << endl;
+    cout << "20. Удалить граф" << endl;
+    cout << "21. Посмотреть граф" << endl;
     cout << "0. Выход" << endl;
     cout << "Введите команду: ";
 }
@@ -192,17 +195,17 @@ void topsort(unordered_map<int, vector<paraks>>& g, unordered_map<int, bool>& co
 
 
 
-void Vgraph(unordered_map<int, vector<paraks>>& graph, unordered_map<int, ks>& kss, unordered_map<int, truba>& pipes, int indexpipe, int indexks1, int indexks2)
+void Vgraph(unordered_map<int, vector<paraks>>& g, unordered_map<int, ks>& kss, unordered_map<int, truba>& pipes, int indexpipe, int indexks1, int indexks2)
 {
     paraks p;
     p.idpipe = indexpipe;
     p.idks = indexks2;
-    graph[indexks1].push_back(p);
+    g[indexks1].push_back(p);
 }
 
-void vivodgraph(unordered_map<int, vector<paraks>>& graph, unordered_map<int, ks>& kss, unordered_map<int, truba>& pipes)
+void vivodgraph(unordered_map<int, vector<paraks>>& g, unordered_map<int, ks>& kss, unordered_map<int, truba>& pipes)
 {
-    for (auto& element : graph)
+    for (auto& element : g)
     {
         cout << "КС с ID " << element.first << " соединен с КС'ми ID: ";
         for (auto ks = element.second.begin(); ks != element.second.end(); ks++)
@@ -271,6 +274,54 @@ void gfromfile(unordered_map<int, vector<paraks>>& g)
     }
 }
 
+bool checkprov(unordered_map<int, vector<paraks>>& g, unordered_map<int, ks>& kss, unordered_map<int, truba>& pipes, int& idks)
+{
+
+    bool exist = false;
+    vector<int> todelete;
+    if (g.find(idks) != g.end()) return false;
+    for (auto element = g.begin(); element != g.end(); element++)
+    {
+        for (auto i = 0; i < element->second.size(); i++)
+        {
+            if (element->second[i].idks == idks) {
+                element->second.erase(element->second.begin() + i);
+                exist = true;
+                todelete.push_back(element->first);
+            }
+        }
+    }
+    for (auto& i : todelete)
+    {
+        if (g[i].size() == 0) g.erase(i);
+    }
+    return exist;
+}
+
+
+void deleteconnection(unordered_map<int, vector<paraks>>& g, unordered_map<int, ks> kss, unordered_map<int, truba>& pipes)
+{
+    cout << "Введите ID КС: ";
+    int idks = checking(0, 200, "Введите ID КС: ");
+
+    while (kss.find(idks) == kss.end())
+    {
+        cout << "Введите еще раз, такой КС нет в сети" << endl;
+        cout << "Введите ID КС: ";
+        idks = checking(0, 200 , "Введите ID КС: ");
+    }
+    if (checkprov(g, kss, pipes, idks))
+    {
+        cout << "Удален!" << endl;;
+    }
+    else
+    {
+        cout << "Не сток";
+    }
+
+
+}
+
 int main()
 {
     setlocale(LC_ALL, "Russian");
@@ -280,7 +331,7 @@ int main()
     while (true)
     {
         print_menu();
-        switch (checking(0, 18, "Введите команду: "))
+        switch (checking(0, 21, "Введите команду: "))
         {
         case 0:
         {
@@ -562,6 +613,25 @@ int main()
         case 18:
         {
             gfromfile(g);
+            system("pause");
+            break;
+        }
+        case 19:
+        {
+            deleteconnection(g, kss, pipes);
+            system("pause");
+            break;
+        }
+        case 20:
+        {
+            g.clear();
+            cout << "Граф удалён!" << endl;
+            system("pause");
+            break;
+        }
+        case 21:
+        {
+            vivodgraph(g, kss, pipes);
             system("pause");
             break;
         }
