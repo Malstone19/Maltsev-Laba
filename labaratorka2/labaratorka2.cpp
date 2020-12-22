@@ -38,9 +38,10 @@ void print_menu()
     cout << "16. тут должна быть сортировка" << endl;
     cout << "17. Вывод в файл" << endl;
     cout << "18. Загрузка из файла" << endl;
-    cout << "19. Удалить вершину(сток)" << endl;
+    cout << "19. Удалить вершину" << endl;
     cout << "20. Удалить граф" << endl;
     cout << "21. Посмотреть граф" << endl;
+    cout << "22. Кратчайший путь" << endl;
     cout << "0. Выход" << endl;
     cout << "Введите команду: ";
 }
@@ -295,7 +296,7 @@ bool checkprov(unordered_map<int, vector<paraks>>& g, unordered_map<int, ks>& ks
             }
         }
     }
-    for (auto& i : todelete)
+   for (auto& i : todelete)
     {
         if (g[i].size() == 0) g.erase(i);
     }
@@ -325,6 +326,57 @@ void deleteconnection(unordered_map<int, vector<paraks>>& g, unordered_map<int, 
 
 
 }
+int Shortlength(unordered_map<int, vector<paraks>>& g, unordered_map<int, truba>& pipes, const int& indexks1, const int& indexks2)
+{
+
+    unordered_map<int, bool> u = usedks(g);
+    int n = u.size();
+    int s = indexks1; // стартовая вершина
+
+    unordered_map<int, int> d;
+    for (auto& element : g)
+    {
+        d[element.first] = 1e5;
+        for (auto& el2 : element.second)
+        {
+            d[el2.idks] = 1e5;
+        }
+    }
+    unordered_map<int, int> p;
+    for (auto& el : g)
+    {
+        for (auto& el2 : el.second)
+        {
+            p[el2.idks] = 0;
+        }
+    }
+    d[s] = 0;
+
+
+    for (auto i1 = u.begin(); i1 != u.end(); i1++) {
+
+        int v = -1;
+
+        for (auto j1 = u.begin(); j1 != u.end(); j1++) {
+            int j = j1->first;
+            if (!u[j] && (v == -1 || d[j] < d[v]))
+                v = j;
+        }
+        if (d[v] == 1e5)
+            break;
+        u[v] = true;
+
+        for (auto j = g[v].begin(); j != g[v].end(); ++j) {
+            int to = j->idks,
+                len = pipes[j->idpipe].dlina;
+            if (d[v] + len < d[to]) {
+                d[to] = d[v] + len;
+                p[to] = v;
+            }
+        }
+    }
+    return d[indexks2];
+}
 
 int main()
 {
@@ -335,7 +387,7 @@ int main()
     while (true)
     {
         print_menu();
-        switch (checking(0, 21, "Введите команду: "))
+        switch (checking(0, 22, "Введите команду: "))
         {
         case 0:
         {
@@ -636,6 +688,48 @@ int main()
         case 21:
         {
             vivodgraph(g, kss, pipes);
+            system("pause");
+            break;
+        }
+        case 22:
+        {
+            unordered_map <int, bool> usedCS;
+
+            for (auto& unit : g)
+            {
+                usedCS[unit.first] = true;
+                for (auto& p1 : unit.second)
+                {
+                    usedCS[p1.idks] = true;
+                }
+            }
+            cout << "Введите ID 1 КС: ";
+            int idCS1 = checking(1, 1000, "Введите ID 1 КС: ");
+            while (g.find(idCS1) == g.end())
+            {
+                cout << "Некорректный ввод или из этой вершины не выходят ребра\n";
+                cout << "Введите ID 1 КС: ";
+                idCS1 = checking(1, 1000, "Введите ID 1 КС: ");
+            }
+            cout << "Введите ID 2 КС: ";
+            int idCS2 = checking(1, 1000, "Введите ID 2 КС: ");
+            while (usedCS.find(idCS2) == usedCS.end())
+            {
+                cout << "Некорректный ввод\n";
+                cout << "Введите ID 2 КС: ";
+                idCS2 = checking(1, 1000, "Введите ID 2 КС: ");
+            }
+            float path = Shortlength(g, pipes, idCS1, idCS2);
+            if (path >= 1e5)
+            {
+                cout << "Нет пути!";
+            }
+            else
+            {
+                cout << "Длина пути равна:" << path << endl;
+            }
+            system("pause");
+            break;
             system("pause");
             break;
         }
