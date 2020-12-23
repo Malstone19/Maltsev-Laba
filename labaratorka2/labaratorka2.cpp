@@ -368,7 +368,7 @@ int Shortlength(unordered_map<int, vector<paraks>>& g, unordered_map<int, truba>
 
         for (auto j = g[v].begin(); j != g[v].end(); ++j) {
             int to = j->idks,
-                len = pipes[j->idpipe].dlina;
+                len = !pipes[j->idpipe].repair ? pipes[j->idpipe].dlina : 1e5;
             if (d[v] + len < d[to]) {
                 d[to] = d[v] + len;
                 p[to] = v;
@@ -722,7 +722,7 @@ int main()
             float path = Shortlength(g, pipes, idks1, idks2);
             if (path >= 1e5)
             {
-                cout << "Нет пути!";
+                cout << "Нет пути!" << endl;
             }
             else
             {

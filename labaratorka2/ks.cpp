@@ -58,7 +58,7 @@ istream& operator >> (istream& in, ks& t)
     cout << "¬ведите количество работающих цехов: ";
     t.ammountcehwork = checking(0,t.ammountceh, "¬ведите количество работающих цехов: ");
     cout << "¬ведите показатель:";
-    t.index = checking(0.0, 1.0, "¬ведите показатель:");
+    t.index = checking(0.0, 5.0, "¬ведите показатель:");
     return in;
 }
 
