@@ -693,33 +693,33 @@ int main()
         }
         case 22:
         {
-            unordered_map <int, bool> usedCS;
+            unordered_map <int, bool> usedKs;
 
             for (auto& unit : g)
             {
-                usedCS[unit.first] = true;
+                usedKs[unit.first] = true;
                 for (auto& p1 : unit.second)
                 {
-                    usedCS[p1.idks] = true;
+                    usedKs[p1.idks] = true;
                 }
             }
             cout << "Введите ID 1 КС: ";
-            int idCS1 = checking(1, 1000, "Введите ID 1 КС: ");
-            while (g.find(idCS1) == g.end())
+            int idks1 = checking(1, 1000, "Введите ID 1 КС: ");
+            while (g.find(idks1) == g.end())
             {
                 cout << "Некорректный ввод или из этой вершины не выходят ребра\n";
                 cout << "Введите ID 1 КС: ";
-                idCS1 = checking(1, 1000, "Введите ID 1 КС: ");
+                idks1 = checking(1, 1000, "Введите ID 1 КС: ");
             }
             cout << "Введите ID 2 КС: ";
-            int idCS2 = checking(1, 1000, "Введите ID 2 КС: ");
-            while (usedCS.find(idCS2) == usedCS.end())
+            int idks2 = checking(1, 1000, "Введите ID 2 КС: ");
+            while (usedKs.find(idks2) == usedKs.end())
             {
                 cout << "Некорректный ввод\n";
                 cout << "Введите ID 2 КС: ";
-                idCS2 = checking(1, 1000, "Введите ID 2 КС: ");
+                idks2 = checking(1, 1000, "Введите ID 2 КС: ");
             }
-            float path = Shortlength(g, pipes, idCS1, idCS2);
+            float path = Shortlength(g, pipes, idks1, idks2);
             if (path >= 1e5)
             {
                 cout << "Нет пути!";
@@ -728,8 +728,6 @@ int main()
             {
                 cout << "Длина пути равна:" << path << endl;
             }
-            system("pause");
-            break;
             system("pause");
             break;
         }
